@@ -20,6 +20,7 @@ const int default_tok_2 = '2';
 const int default_rounds = 1;
 const int default_is_connect_six = false;
 const int default_is_ai_match = false;
+//TODO: make these ^^^ into Game_MAtch fields<-------------------
 #endif
 
 //maintains a single match's state
@@ -54,7 +55,27 @@ public:
     char* get_grid_row(int y);
 };
 
-
+class ai
+{
+private:
+    bool is_player_1_turn;
+    int width;
+    int height;
+    int seconds_to_play;
+    char p1_scenario_buff[1024] = {0};
+    char p2_scenario_buff[1024] = {0};
+    int p1_col_buff[64] = {0};
+    int p2_col_buff[64] = {0};
+    int p1_scenario_buff_end;
+    int p2_scenario_buff_end;
+    int p1_col_buff_end;
+    int p2_col_buff_end;
+public:
+    ai();
+    int choose_column(Game_Match* match, bool is_player_1_turn = false);
+    play_turn();
+    gen_1();
+};
 
 #endif // CONNECT_FOUR_H
 

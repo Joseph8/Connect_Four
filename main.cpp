@@ -1,7 +1,5 @@
 ﻿#include <connect_four.h>
 
-//TODO: make these ^^^ into Game_MAtch fields<-------------------
-
 Game_Match::Game_Match(int width, int height, char token_1, char token_2, int rounds, bool is_connect_six, bool is_ai_match)
 {
     if (width < min_dimensions || height < min_dimensions || width > max_dimensions || height > max_dimensions) {
