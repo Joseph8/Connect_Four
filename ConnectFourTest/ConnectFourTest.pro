@@ -1,15 +1,16 @@
 TEMPLATE = app
-CONFIG += c++11
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp \
-    ai.cpp
+SOURCES += \
+    ai_test.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
+include(../ConnectFour/deployment.pri)
+
 HEADERS += \
-    connect_four.h
+    catch.hpp
 

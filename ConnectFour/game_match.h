@@ -1,14 +1,9 @@
-#ifndef CONNECT_FOUR_H
-#define CONNECT_FOUR_H
+#ifndef GAME_MATCH_H
+#define GAME_MATCH_H
 
-#include <iostream>
-#include <windows.h>
-#include <sstream>
+
 
 using namespace std;
-
-#ifndef CONNECT_FOUR_CONSTANTS
-#define CONNECT_FOUR_CONSTANTS
 
 const int min_dimensions = 4;
 const int max_dimensions = 20;
@@ -20,11 +15,9 @@ const int default_tok_2 = '2';
 const int default_rounds = 1;
 const int default_is_connect_six = false;
 const int default_is_ai_match = false;
-//TODO: make these ^^^ into Game_MAtch fields<-------------------
-#endif
 
 //maintains a single match's state
-class Game_Match
+class GameMatch
 {
 private:
     int width;
@@ -39,7 +32,7 @@ private:
     bool is_connect_six;
     bool is_ai_match;
 public:
-    Game_Match(int width = default_width, int height = default_height, char token_1 = default_tok_1, char token_2 = default_tok_2, int rounds_left = default_rounds, bool is_connect_six = default_is_connect_six, bool is_ai_match = default_is_ai_match);
+    GameMatch(int width = default_width, int height = default_height, char token_1 = default_tok_1, char token_2 = default_tok_2, int rounds_left = default_rounds, bool is_connect_six = default_is_connect_six, bool is_ai_match = default_is_ai_match);
     void reset();
     int drop_token(int pos, bool isPlayer1);
     bool check_if_won(bool is_player_1, int x, int y);
@@ -55,27 +48,6 @@ public:
     char* get_grid_row(int y);
 };
 
-class ai
-{
-private:
-    bool is_player_1_turn;
-    int width;
-    int height;
-    int seconds_to_play;
-    char p1_scenario_buff[1024] = {0};
-    char p2_scenario_buff[1024] = {0};
-    int p1_col_buff[64] = {0};
-    int p2_col_buff[64] = {0};
-    int p1_scenario_buff_end;
-    int p2_scenario_buff_end;
-    int p1_col_buff_end;
-    int p2_col_buff_end;
-public:
-    ai();
-    int choose_column(Game_Match* match, bool is_player_1_turn = false);
-    play_turn();
-    gen_1();
-};
+#include "ai.h"
 
-#endif // CONNECT_FOUR_H
-
+#endif // GAME_MATCH_H
