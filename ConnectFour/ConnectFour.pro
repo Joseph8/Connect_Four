@@ -16,5 +16,6 @@ HEADERS += \
     connect_four.h
 
 DISTFILES += \
-    LICENSE_1_0.txt
+    LICENSE_1_0.txt \
+    README.md
 
