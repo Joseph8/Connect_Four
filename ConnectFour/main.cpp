@@ -154,7 +154,7 @@ void play_round() {
     int connect_six_turn = 1;
     int col = -1;
     int winner = 0;
-    ai AI;
+    AI ai;
     //keep playing turns
     do {
         if (winner != -1) {
@@ -171,7 +171,7 @@ void play_round() {
         cout << "\n\nPlayer " << (is_player_1_turn ? "1" : "2") <<"'s turn.";
         if (match->get_is_ai_match() && !is_player_1_turn) {
             //Sleep(1000);
-            col = AI.choose_column(match);
+            col = ai.choose_column(match);
             cout << "\n\nColumn to place token in (1 - " << match->get_width() << "):  " << col + 1 << "\n";
         } else {
             do {

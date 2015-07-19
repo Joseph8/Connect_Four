@@ -1,0 +1,12 @@
+#define CATCH_CONFIG_MAIN
+
+#include "catch.hpp"
+#include "ai.h"
+
+TEST_CASE ("Choose column chooses an index within the board width", "[choose_column]" ) {
+    GameMatch match = GameMatch();
+    AI ai = AI();
+    int result = ai.choose_column(match);
+    REQUIRE(result < ai.get_width());
+    REQUIRE(result >= 0);
+}

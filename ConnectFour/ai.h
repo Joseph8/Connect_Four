@@ -12,7 +12,7 @@ const int col_list_max = 3120;
 const int scen_buff_max = 1024;
 const int col_buff_max = 64;
 
-class ai
+class AI
 {
 private:
     bool is_player_1_turn;
@@ -30,7 +30,7 @@ private:
     int scen_list_size; // number of array indexes scen currently uses - 1 (idx of last used position in list)
     int col_list_size;
 public:
-    ai();
+    AI();
     int choose_column(GameMatch* match, bool is_player_1_turn = false);
     play_turn();
     gen_1();

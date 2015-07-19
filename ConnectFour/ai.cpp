@@ -7,7 +7,7 @@ const char end_scen = '~';
 const int board_width = default_width;
 const int board_height = default_height;
 
-ai::ai() {
+AI::AI() {
     is_player_1_turn = true;
     seconds_to_play = 60 * 2;
     p1_scenario_buff_size = 0;
@@ -19,7 +19,7 @@ ai::ai() {
 }
 
 
-int ai::choose_column(GameMatch* cur_match, bool is_player_1_turn)
+int AI::choose_column(GameMatch* cur_match, bool is_player_1_turn)
 {
     int width = cur_match->get_width();
     GameMatch sim_match;
@@ -53,7 +53,7 @@ int ai::choose_column(GameMatch* cur_match, bool is_player_1_turn)
     return r;
 }
 
-ai::play_turn()
+AI::play_turn()
 {
     int col = choose_column(ai_match);
     is_player_1_turn ? is_player_1_turn = false : is_player_1_turn = true;
@@ -62,7 +62,7 @@ ai::play_turn()
     return -1;
 }
 
-ai::gen_1()
+AI::gen_1()
 {
     GameMatch* ai_match = new GameMatch(board_width, board_height);
     clock_t start = clock();
@@ -102,7 +102,7 @@ ai::gen_1()
     return -1;
 }
 
-inline void ai::grid_to_buff(int col) {
+inline void AI::grid_to_buff(int col) {
     char* scen_buff_ptr;
     int* col_buff_ptr;
     int* scen_buff_size_ptr;
@@ -148,7 +148,7 @@ inline void ai::grid_to_buff(int col) {
     (*col_buff_size_ptr)++;
 }
 
-inline void ai::buff_to_list(bool is_p1_win) {
+inline void AI::buff_to_list(bool is_p1_win) {
     char* scen_buff_ptr;
     int* col_buff_ptr;
     int* scen_buff_size_ptr;
@@ -167,43 +167,48 @@ inline void ai::buff_to_list(bool is_p1_win) {
         col_buff_size_ptr = &p2_col_buff_size;
     }
 
+    int scen_buff_idx = 0;
     while (*scen_buff_ptr < *scen_buff_size_ptr) {
         bool scen_list_is_full = false;
         char* scen_list_ptr = &scen_list[0];
-        int scen_idx = 0;
+        int scen_list_idx = 0;
+
         //look through the scen list for a scenario in scen buff
         while (scen_list_ptr + *scen_list_ptr < scen_list + scen_list_size) {
             if (*scen_list_ptr == *scen_buff_ptr && !memcmp(scen_list_ptr, scen_buff_ptr, (size_t) *scen_buff_ptr)) {
-                if (col_list[scen_idx][*(col_buff_ptr+scen_idx)] < 4294967296) {   //magic num is max int val
-                    //if the scenairio is found and it will not overflow, increment the
-                    //index in the column list of the position chosen in the current scenario
-                    //to add weight to choosing this column in this scenario since this scenario
-                    //won and thus this choice will more likely result in winning
-                    col_list[scen_idx][*(col_buff_ptr+scen_idx)]++;
-                } else {
-                    cout << "col_list entry tried to overflow!" << endl; //! remove this if() and just increment if overflow limit won't be reached
-                }
                 goto found_scen;
             }
-            scen_idx++;
+            scen_list_idx++;
+            //add the length of the scenario to the scenario list pointer to go to the beginning og the next scenario (traverses the list)
             scen_list_ptr += *scen_list_ptr;
         }
 
-        //if the scenario wasn't found and there is room in scen list, add it to the scen and col lists
+        //if the scenario wasn't found and there is room in scen list, add it to the scen list
         if (!scen_list_is_full && scen_list_size + *scen_buff_ptr < scen_list_max) {
             memcpy(scen_list + scen_list_size, scen_buff_ptr, (size_t) *scen_buff_ptr);
             scen_list_size += *scen_buff_ptr;
-            //TODO: col_list
         } else {
             scen_list_is_full = true;
         }
+
         found_scen:
+
+        if (col_list[scen_list_idx][*(col_buff_ptr+scen_buff_idx)] < 4294967296) {   //magic num is max int val
+            //increment the index in the column list of the position chosen in the current scenario
+            //to add weight to choosing this column in this scenario since this scenario
+            //won and thus this choice will more likely result in winning
+            col_list[scen_list_idx][*(col_buff_ptr+scen_buff_idx)]++;
+        } else {
+            cout << "col_list entry tried to overflow!" << endl; //! remove this if() and just increment if overflow limit won't be reached
+        }
+
         scen_buff_ptr += *scen_buff_ptr;
+        scen_buff_idx++;
     }
 
     //instead of this, copy each scenario one at a time to try to match scenarios to scenarios that exist in the list
-    memcpy(scen_list + scen_list_size, scen_buff_ptr, *scen_buff_size_ptr);
-    col_list[col_list_size - 1][*(col_buff_ptr + *col_buff_size_ptr - 1)];
+    //memcpy(scen_list + scen_list_size, scen_buff_ptr, *scen_buff_size_ptr);
+    //col_list[col_list_size - 1][*(col_buff_ptr + *col_buff_size_ptr - 1)];
 }
 
 //void get_scen_idx

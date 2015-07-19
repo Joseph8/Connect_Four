@@ -1,0 +1,14 @@
+#define CATCH_CONFIG_MAIN
+
+#include "catch.hpp"
+#include "../ConnectFour/ai.h"
+//#include "ai.h"
+//#include "../ConnectFour/ai.cpp"
+
+TEST_CASE ("Choose column chooses an index within the board width", "[ai]" ) {
+    GameMatch match;
+    AI ai = new AI();
+    int result = ai.choose_column(&match);
+    REQUIRE(result < match.get_width());
+    REQUIRE(result >= 0);
+}
