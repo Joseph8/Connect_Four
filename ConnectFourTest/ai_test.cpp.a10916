@@ -62,28 +62,11 @@ TEST_CASE ("check buff contents", "[grid_to_buff]") {
     GameMatch* match = new GameMatch();
     AI* ai = new AI();
 
-    SECTION ("check contents after a few rounds") {
-        int col = 2;
+    SECTION ("") {
+        int col = ai->choose_column(match, true);
         ai->grid_to_buff(col);
-        //scen buff array initialized all elements to 0, so this checks to make sure nothing was added to scen buff
-        REQUIRE (ai->p1_scenario_buff[0] == 0);
-        REQUIRE (ai->p1_scenario_buff[2] == 0);
-        REQUIRE (ai->p1_scenario_buff[6] == 0);
-        REQUIRE (ai->p1_col_buff[0] == col);
-        match->drop_token(col, true);
-
-        //ai->next_turn();
-        col = 3;
-        ai->grid_to_buff(col);
-        REQUIRE (ai->p1_scenario_buff[0] == fill_val);
-        REQUIRE (ai->p1_scenario_buff[2] == default_tok_1);
-        REQUIRE (ai->p1_scenario_buff[6] == fill_val);
-        REQUIRE (ai->p1_scenario_buff[7] == 0);
-        REQUIRE (ai->p1_col_buff[0] == 2);
-        match->drop_token(col, false);
-
     }
-    /*
+
     SECTION ("") {
         match->drop_token(0, true);
         match->drop_token(0, false);
@@ -91,7 +74,7 @@ TEST_CASE ("check buff contents", "[grid_to_buff]") {
         match->drop_token(5, false);
         match->drop_token(0, true);
     }
-    */
+
     delete(match);
     delete(ai);
 }

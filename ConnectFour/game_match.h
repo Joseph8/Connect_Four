@@ -1,8 +1,6 @@
 #ifndef GAME_MATCH_H
 #define GAME_MATCH_H
 
-
-
 using namespace std;
 
 const int min_dimensions = 4;

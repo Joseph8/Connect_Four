@@ -8,7 +8,7 @@ const int board_width = default_width;
 const int board_height = default_height;
 
 AI::AI() {
-    is_player_1_turn = true;
+    is_p1_turn = true;
     seconds_to_play = 60 * 2;
     p1_scenario_buff_size = 0;
     p2_scenario_buff_size = 0;
@@ -56,9 +56,9 @@ int AI::choose_column(GameMatch* cur_match, bool is_player_1_turn)
 AI::play_turn()
 {
     int col = choose_column(ai_match);
-    is_player_1_turn ? is_player_1_turn = false : is_player_1_turn = true;
-    col = choose_column(ai_match, is_player_1_turn);
-    ai_match->drop_token(col, is_player_1_turn);
+    is_p1_turn ? is_p1_turn = false : is_p1_turn = true;
+    col = choose_column(ai_match, is_p1_turn);
+    ai_match->drop_token(col, is_p1_turn);
     return -1;
 }
 
@@ -76,7 +76,7 @@ AI::gen_1()
     p2_col_buff_size = 0;
     ai_match->reset();
     while (seconds_to_play > duration) {
-        int col = choose_column(ai_match, is_player_1_turn);
+        int col = choose_column(ai_match, is_p1_turn);
 
         grid_to_buff(col);
 
@@ -84,7 +84,7 @@ AI::gen_1()
         duration = (clock() - start) / (double) CLOCKS_PER_SEC;
         //check if next scenario will overfow the buff
 
-        int winner = ai_match->drop_token(col, is_player_1_turn);
+        int winner = ai_match->drop_token(col, is_p1_turn);
         if (winner == 1) {
             buff_to_list(true);
             goto new_match;
@@ -108,14 +108,14 @@ inline void AI::grid_to_buff(int col) {
     int* scen_buff_size_ptr;
     int* col_buff_size_ptr;
 
-    if (is_player_1_turn) {
-        is_player_1_turn = false;
+    if (is_p1_turn) {
+        is_p1_turn = false;
         scen_buff_ptr = &p2_scenario_buff[p2_scenario_buff_size];
         col_buff_ptr = &p2_col_buff[p2_col_buff_size];
         scen_buff_size_ptr = &p2_scenario_buff_size;
         col_buff_size_ptr = &p2_col_buff_size;
     } else {
-        is_player_1_turn = true;
+        is_p1_turn = true;
         scen_buff_ptr = &p1_scenario_buff[p1_scenario_buff_size];
         col_buff_ptr = &p1_col_buff[p1_col_buff_size];
         scen_buff_size_ptr = &p1_scenario_buff_size;
@@ -209,6 +209,10 @@ inline void AI::buff_to_list(bool is_p1_win) {
     //instead of this, copy each scenario one at a time to try to match scenarios to scenarios that exist in the list
     //memcpy(scen_list + scen_list_size, scen_buff_ptr, *scen_buff_size_ptr);
     //col_list[col_list_size - 1][*(col_buff_ptr + *col_buff_size_ptr - 1)];
+}
+
+void AI::next_turn() {
+    is_p1_turn = (is_p1_turn ? false : true);
 }
 
 //void get_scen_idx
